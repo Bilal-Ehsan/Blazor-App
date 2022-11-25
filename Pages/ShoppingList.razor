@@ -1,0 +1,63 @@
+@page "/shoppinglist"
+@using Application.Data;
+
+<PageTitle>Your Groceries</PageTitle>
+
+<h2 class="mb-4">Shopping List</h2>
+
+<input type="text" class="form-control mb-3" placeholder="Grocery Name" @bind="groceryName" maxlength="30" required />
+<input type="number" class="form-control mb-3" @bind="groceryPrice" required />
+<button @onclick="AddGrocery" class="btn btn-primary mb-4">Add Grocery</button>
+
+<table class="table mb-5">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th></th>
+        </tr>   
+    </thead>
+
+    @foreach (var grocery in groceries)
+    {
+        <ShoppingItem 
+            GroceryItem="@grocery" 
+            OnGroceryPriceDecreased="OnGroceryPriceDecreased" 
+        />
+    }
+</table>
+
+@* <p>Total = @groceries.Sum(grocery => grocery.Price)</p> *@
+<p>Total = @sum</p>
+
+@code {
+    private string? groceryName;
+    private double groceryPrice;
+    private double sum;
+
+    private List<Grocery> groceries = new List<Grocery>();
+
+    private void AddGrocery()
+    {
+        if (!string.IsNullOrWhiteSpace(groceryName) && groceryPrice > 0)
+        {
+            groceries.Add(new Grocery { Name = groceryName, Price = groceryPrice });
+
+            groceryName = string.Empty;
+            groceryPrice = 0;
+
+            UpdateTotalAmount();
+        }
+    }
+
+    public void UpdateTotalAmount()
+    {
+        sum = groceries.Sum(grocery => grocery.Price);
+    }
+
+    // Our event handler method
+    public void OnGroceryPriceDecreased()
+    {
+        UpdateTotalAmount();
+    }
+}

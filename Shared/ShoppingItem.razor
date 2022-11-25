@@ -1,0 +1,31 @@
+@using Application.Data;
+
+<tbody>
+    <tr>
+        <td>@GroceryItem.Name</td>
+        <td>@GroceryItem.Price</td>
+        <td>
+            <span class="discount-btn" @onclick="Discount">
+                <strong>50p</strong> Discount
+            </span>
+        </td>
+    </tr>
+</tbody>    
+
+@code {
+    #nullable disable
+
+    [Parameter]
+    public Grocery GroceryItem { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnGroceryPriceDecreased { get; set; }
+
+    private async Task Discount()
+    {
+        if (GroceryItem.Price > 0.5)
+            GroceryItem.Price -= 0.5;
+
+        await OnGroceryPriceDecreased.InvokeAsync(); // Update total after item change using event
+    }
+}

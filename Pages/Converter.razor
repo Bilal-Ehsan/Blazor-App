@@ -1,0 +1,36 @@
+@page "/converter"
+
+<PageTitle>Converter</PageTitle>
+
+<h2 class="mb-4">Converter</h2>
+
+<label class="mb-1">Kilograms</label>
+<input type="number" class="form-control mb-3" @bind-value="Kilograms" @bind-value:event="oninput" />
+
+<label class="mb-1">Grams</label>
+<input type="number" class="form-control mb-3" @bind-value="Grams" @bind-value:event="oninput" />
+
+@code {
+    private double kilograms = 1;
+    private double grams = 1000;
+
+    public double Kilograms 
+    {
+        get => kilograms;
+        set
+        {
+            kilograms = value;
+            grams = value * 1000;
+        }
+    }
+
+    public double Grams 
+    {
+        get => grams;
+        set
+        {
+            grams = value;
+            kilograms = value / 1000;
+        }
+    }
+}
