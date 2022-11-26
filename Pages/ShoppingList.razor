@@ -5,9 +5,26 @@
 
 <h2 class="mb-4">Shopping List</h2>
 
-<input type="text" class="form-control mb-3" placeholder="Grocery Name" @bind="groceryName" maxlength="30" required />
+@* <input type="text" class="form-control mb-3" placeholder="Grocery Name" @bind="groceryName" maxlength="30" required />
 <input type="number" class="form-control mb-3" @bind="groceryPrice" required />
-<button @onclick="AddGrocery" class="btn btn-primary mb-4">Add Grocery</button>
+<button @onclick="AddGrocery" class="btn btn-primary mb-4">Add Grocery</button> *@
+
+<EditForm Model="@grocery" OnValidSubmit="AddGrocery">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label class="w-100">
+            <InputText @bind-Value="grocery.Name" class="form-control" placeholder="Grocery Name" />
+        </label>
+    </p>
+    <p>
+        <label class="w-100">
+            <InputNumber @bind-Value="grocery.Price" class="form-control mb-3" />
+        </label>
+        <button type="submit" class="btn btn-primary mb-4 d-block">Add Grocery</button>
+    </p>
+</EditForm>
 
 <table class="table mb-5">
     <thead>
@@ -34,11 +51,12 @@
     private string? groceryName;
     private double groceryPrice;
     private double sum;
-
     private List<Grocery> groceries = new List<Grocery>();
+    private Grocery grocery = new Grocery();
 
     private void AddGrocery()
     {
+        /*
         if (!string.IsNullOrWhiteSpace(groceryName) && groceryPrice > 0)
         {
             groceries.Add(new Grocery { Name = groceryName, Price = groceryPrice });
@@ -48,6 +66,12 @@
 
             UpdateTotalAmount();
         }
+        */
+
+        groceries.Add(grocery);
+        grocery = new(); // Refresh object
+
+        UpdateTotalAmount();
     }
 
     public void UpdateTotalAmount()
